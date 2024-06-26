@@ -1,1 +1,0 @@
-csvread("open")
