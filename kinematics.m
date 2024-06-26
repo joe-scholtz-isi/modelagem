@@ -4,6 +4,7 @@ wheels_radius =  0.24;
 
 t = data(:,1) - data(2,1);
 t(1) = 0;
+t(2) = ( t(3) - t(1) )/2.0;
 gt_x = data(:,2);
 gt_y = data(:,3);
 gt_theta = data(:,5);
@@ -32,13 +33,24 @@ y = cumtrapz(t,Vy);
 
 data = [t,x,y,theta];
 
-% plot(t,[theta,gt_theta])
-% legend(["theta";"gt theta"])
-plot(t,x)
-hold on
-plot(t,gt_x)
-% plot(t,[y,gt_y])
-% legend(["y";"gt y"])
+plot(t,[theta,gt_theta])
+legend(["model prediction";"ground truth"])
+title("global theta angle of the robot");
+ylabel("angle [rad]");
+xlabel("time [s]");
+
+plot(t,[x,gt_x])
+legend(["model prediction";"ground truth"])
+title("global x coordinate of the robot");
+ylabel("distance [m]");
+xlabel("time [s]");
+
+plot(t,[y,gt_y])
+legend(["model prediction";"ground truth"])
+title("global y coordinate of the robot");
+ylabel("distance [m]");
+xlabel("time [s]");
+
 % plot(t,[x,y,theta,gt_x,gt_y,gt_theta]);
 % legend(["x";"y";"theta";"ground truth x"; "ground truth y"; "ground truth theta"]);
 

@@ -1,4 +1,4 @@
-function [x2p, y2p, wp] = dinamica_direta(Vx, Vy, w, F1, F2, F3, F4, s1, s2, s3, s4)
+function [x2p, y2p, wp] = dinamica_direta(vx, vy, w, F1, F2, F3, F4, s1, s2, s3, s4)
   m = 1120;
   jz = 100;
   l = 0.52; %wheeltrack
@@ -20,10 +20,10 @@ function [x2p, y2p, wp] = dinamica_direta(Vx, Vy, w, F1, F2, F3, F4, s1, s2, s3,
             0,   1,   0,    1,   0,   1,    0,    1;
             l/2, c/2, -l/2, c/2, l/2, -c/2, -l/2, -c/2];
 
-  u = sigma*Fxy;
+  u = sigma*Fxy
 
-  x2p = (Vy.*w)  + (1/m)*u(1,1);
-  y2p = (-Vx.*w) + (1/m)*u(2,1);
+  x2p = (vy.*w)  + (1/m)*u(1,1);
+  y2p = (-vx.*w) + (1/m)*u(2,1);
   wp  =    w.*0    + (1/jz)*u(3,1);
 
 end
