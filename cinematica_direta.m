@@ -19,9 +19,9 @@ function [vx, vy, w] = cinematica_direta(V1,V2,V3,V4, s1, s2, s3, s4)
 
   x=sigma*vxy;
 
-  vx=x(1,:)/4;
+  vx=x(1,:);
 
-  vy=x(2,:)/4;
+  vy=x(2,:);
 
   w=x(3,:);
 end

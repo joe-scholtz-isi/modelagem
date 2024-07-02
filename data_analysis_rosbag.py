@@ -15,7 +15,7 @@ def main():
         "-m",
         type=str,
         required=True,
-        choices=["time", "kinematics", "dynamics"],
+        choices=["time", "kinematics", "movement", "dynamics"],
         help="Which model to output data to",
     )
     parser.add_argument(
@@ -23,7 +23,7 @@ def main():
         "-i",
         type=str,
         required=False,
-        default="data/rosbag2_2024_06_05-21_27_50.csv",
+        default="data/rosbag2_2024_06_27-03_51_44.csv",
         help="Input rosbag .csv file",
     )
     parser.add_argument(
@@ -75,6 +75,16 @@ def main():
                 "/joint_states/rear_left_wheel_joint/velocity",
                 "/joint_states/rear_right_motor_joint/position",
                 "/joint_states/rear_right_wheel_joint/velocity",
+            ]
+        ]
+    elif args.model == "movement":
+        data = data[
+            [
+                "__time",
+                "/ground_truth/pose/pose/position/x",
+                "/ground_truth/pose/pose/position/y",
+                "/ground_truth/pose/pose/position/z",
+                "/ground_truth/pose/pose/orientation/yaw",
             ]
         ]
     elif args.model == "dynamics":

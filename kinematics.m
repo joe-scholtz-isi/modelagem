@@ -25,11 +25,11 @@ V4 = data(:,14) * wheels_radius;
 theta = cumtrapz(t,w');
 theta = atan2(sin(theta),cos(theta)); %wrap to [-pi;pi]
 
-Vx = vx'.*cos(theta) - vy'.*sin(theta);
-Vy = vx'.*sin(theta) + vy'.*cos(theta);
+% Vx = vx'.*cos(theta) - vy'.*sin(theta);
+% Vy = vx'.*sin(theta) + vy'.*cos(theta);
 
-x = cumtrapz(t,Vx);
-y = cumtrapz(t,Vy);
+x = cumtrapz(t,vx');
+y = cumtrapz(t,vy');
 
 data = [t,x,y,theta];
 
@@ -51,7 +51,12 @@ title("global y coordinate of the robot");
 ylabel("distance [m]");
 xlabel("time [s]");
 
-% plot(t,[x,y,theta,gt_x,gt_y,gt_theta]);
-% legend(["x";"y";"theta";"ground truth x"; "ground truth y"; "ground truth theta"]);
+plot(x,y)
+title("global x-y coordinate of the robot");
+ylabel("distance [m]");
+xlabel("distance [m]");
+hold on
+plot(gt_x,gt_y)
+legend(["model prediction";"ground truth"])
 
-csvwrite("data/data_out.csv",data);
+csvwrite("data/kinematics_out.csv",data);

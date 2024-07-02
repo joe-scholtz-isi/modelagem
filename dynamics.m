@@ -24,16 +24,22 @@ s4 = data(:,17);
 F4 = data(:,18) * wheels_radius;
 
 
-vx = [0];
-vy = [0];
-w = [0];
+vx = [];
+vy = [];
+w = [];
 
 ax = [];
 ay = [];
 wp = [];
 
-for i = 1:length(F1)/10
-  [x2p, y2p, theta2p] = dinamica_direta(vx(end), vy(end), w(end), F1(i), F2(i), F3(i), F4(i), s1(i), s2(i), s3(i), s4(i))
+for i = 1:length(F1)
+  i
+  length(F1)
+  if(i == 1)
+    [x2p, y2p, theta2p] = dinamica_direta(0,0,0, F1(i), F2(i), F3(i), F4(i), s1(i), s2(i), s3(i), s4(i))
+  else
+    [x2p, y2p, theta2p] = dinamica_direta(vx(end), vy(end), w(end), F1(i), F2(i), F3(i), F4(i), s1(i), s2(i), s3(i), s4(i))
+  endif
 
   ax(end + 1) = x2p;
   ay(end + 1) = y2p;
