@@ -100,6 +100,16 @@ def main():
                 "/joint_states/rear_right_wheel_joint/effort",
             ]
         ]
+    elif args.model == "steering":
+        data = data[
+            [
+                "__time",
+                "/effort_controller/commands/data[1]",
+                "/joint_states/front_left_wheel_joint/effort",
+                "/joint_states/front_left_motor_joint/position",
+                "/joint_states/front_left_motor_joint/velocity",
+            ]
+        ]
     data = data.ffill().fillna(0)
     print(data.columns)
     if args.save_output:
