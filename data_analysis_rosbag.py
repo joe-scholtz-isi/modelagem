@@ -15,7 +15,14 @@ def main():
         "-m",
         type=str,
         required=True,
-        choices=["time", "kinematics", "movement", "dynamics"],
+        choices=[
+            "time",
+            "kinematics",
+            "validation",
+            "movement",
+            "dynamics",
+            "steering",
+        ],
         help="Which model to output data to",
     )
     parser.add_argument(
@@ -37,7 +44,7 @@ def main():
         "--output_csv",
         "-o",
         type=str,
-        required=True,
+        required=False,
         help="Output .csv file",
     )
     args = parser.parse_args()
@@ -75,6 +82,27 @@ def main():
                 "/joint_states/rear_left_wheel_joint/velocity",
                 "/joint_states/rear_right_motor_joint/position",
                 "/joint_states/rear_right_wheel_joint/velocity",
+            ]
+        ]
+    elif args.model == "validation":
+        data = data[
+            [
+                "__time",
+                "/ground_truth/pose/pose/position/x",
+                "/ground_truth/pose/pose/position/y",
+                "/ground_truth/pose/pose/position/z",
+                "/ground_truth/pose/pose/orientation/yaw",
+                "/joint_states/front_left_motor_joint/position",
+                "/joint_states/front_left_wheel_joint/velocity",
+                "/joint_states/front_right_motor_joint/position",
+                "/joint_states/front_right_wheel_joint/velocity",
+                "/joint_states/rear_left_motor_joint/position",
+                "/joint_states/rear_left_wheel_joint/velocity",
+                "/joint_states/rear_right_motor_joint/position",
+                "/joint_states/rear_right_wheel_joint/velocity",
+                "/imu/linear_acceleration/x",
+                "/imu/linear_acceleration/y",
+                "/imu/linear_acceleration/z",
             ]
         ]
     elif args.model == "movement":
@@ -123,6 +151,9 @@ def main():
     data = data.ffill().fillna(0)
     print(data.columns)
     if args.save_output:
+        assert (
+            args.output_csv is not None
+        ), "Argument --output_csv has to be set in order to save the output"
         data.to_csv(SCRIPT_DIR / args.output_csv, index=False)
         print(f"saved to: {str(SCRIPT_DIR / args.output_csv)}")
 
