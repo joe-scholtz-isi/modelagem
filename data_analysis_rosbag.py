@@ -148,6 +148,17 @@ def main():
                 "/joint_states/front_left_motor_joint/velocity",
             ]
         ]
+        print(data["__time"])
+        data = data.ffill().fillna(0)
+        data = data[(data["__time"] >= 1718737782) & (data["__time"] <= 1718737802)]
+        data[
+            [
+                "__time",
+                "/effort_controller/commands/data[1]",
+                "/joint_states/front_left_motor_joint/position",
+            ]
+        ].plot(x="__time")
+        plt.show()
     data = data.ffill().fillna(0)
     print(data.columns)
     if args.save_output:
