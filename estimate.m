@@ -1,4 +1,4 @@
-data = csvread("open_loop_steering_cut.csv");
+data = csvread("data/open_loop_steering_cut.csv");
 %
 dtime = seconds(linspace(0,data(length(data),1)-data(1,1),length(data))');
 tt = timetable(dtime,data(:,2),data(:,3));
