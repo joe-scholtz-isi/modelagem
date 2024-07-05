@@ -33,24 +33,28 @@ y = cumtrapz(t,vy');
 
 data = [t,x,y,theta];
 
+figure(1)
 plot(t,[theta,gt_theta])
 legend(["model prediction";"ground truth"])
 title("global theta angle of the robot");
 ylabel("angle [rad]");
 xlabel("time [s]");
 
+figure(2)
 plot(t,[x,gt_x])
 legend(["model prediction";"ground truth"])
 title("global x coordinate of the robot");
 ylabel("distance [m]");
 xlabel("time [s]");
 
+figure(3)
 plot(t,[y,gt_y])
 legend(["model prediction";"ground truth"])
 title("global y coordinate of the robot");
 ylabel("distance [m]");
 xlabel("time [s]");
 
+figure(4)
 plot(x,y)
 title("global x-y coordinate of the robot");
 ylabel("distance [m]");
@@ -59,4 +63,4 @@ hold on
 plot(gt_x,gt_y)
 legend(["model prediction";"ground truth"])
 
-csvwrite("data/kinematics_out.csv",data);
+%csvwrite("data/kinematics_out.csv",data);
