@@ -63,10 +63,10 @@ data = [t,x,y,theta];
 
 % plot(t,[theta,gt_theta])
 % legend(["theta";"gt theta"])
-plot(t,x)
-hold on
-plot(t,gt_x)
-legend(["Vx";"gt Vx"])
+% plot(t,x)
+% hold on
+% plot(t,gt_x)
+% legend(["Vx";"gt Vx"])
 % plot(t,[y,gt_y])
 % legend(["y";"gt y"])
 % plot(t,[x,y,theta,gt_x,gt_y,gt_theta]);
