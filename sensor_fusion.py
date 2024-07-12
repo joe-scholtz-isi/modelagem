@@ -43,6 +43,13 @@ def main():
         required=False,
         help="Output .csv file",
     )
+    parser.add_argument(
+        "--output_fig",
+        "-f",
+        type=str,
+        required=False,
+        help="Output .png files",
+    )
     args = parser.parse_args()
 
     data = pd.read_csv(SCRIPT_DIR / args.input_csv)
@@ -79,8 +86,10 @@ def main():
         )
 
         plt.rc("lines", linewidth=2.0)
+        fig_size = [8, 7]
+        dpi_ = 800
 
-        figx, (axxu, axxd) = plt.subplots(2, 1)
+        figx, (axxu, axxd) = plt.subplots(2, 1, figsize=fig_size)
         figx.suptitle("Análise da fusão de sensores no eixo x")
         axxu.plot(data["__time"], data["/odometry/filtered/point/x"], label="Estimação")
         axxu.plot(
@@ -107,8 +116,11 @@ def main():
             label=f"Média do erro absoluto: {mean_abs_error_x:4f} [m]",
         )
         axxd.legend()
+        plt.tight_layout()
+        if args.output_fig is not None:
+            figx.savefig(fname=SCRIPT_DIR / f"{args.output_fig}_x.png", dpi=dpi_)
 
-        figy, (axyu, axyd) = plt.subplots(2, 1)
+        figy, (axyu, axyd) = plt.subplots(2, 1, figsize=fig_size)
         figy.suptitle("Análise da fusão de sensores no eixo y")
         axyu.plot(data["__time"], data["/odometry/filtered/point/y"], label="Estimação")
         axyu.plot(
@@ -135,8 +147,11 @@ def main():
             label=f"Média do erro absoluto: {mean_abs_error_y:4f} [m]",
         )
         axyd.legend()
+        plt.tight_layout()
+        if args.output_fig is not None:
+            figy.savefig(fname=SCRIPT_DIR / f"{args.output_fig}_y.png", dpi=dpi_)
 
-        figxy, (axxyu, axxyd) = plt.subplots(2, 1)
+        figxy, (axxyu, axxyd) = plt.subplots(2, 1, figsize=fig_size)
         figxy.suptitle("Análise da fusão de sensores no plano x-y")
         axxyu.plot(
             data["/odometry/filtered/point/x"],
@@ -167,7 +182,10 @@ def main():
             label=f"Média do erro absoluto: {mean_abs_error_y:4f} [m]",
         )
         axxyd.legend()
-        plt.show()
+        plt.tight_layout()
+        if args.output_fig is not None:
+            figxy.savefig(fname=SCRIPT_DIR / f"{args.output_fig}_xy.png", dpi=dpi_)
+        # plt.show()
         print(data.columns)
 
     if args.save_output:

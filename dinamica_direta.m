@@ -1,6 +1,6 @@
 function [x2p, y2p, wp] = dinamica_direta(vx, vy, w, F1, F2, F3, F4, s1, s2, s3, s4)
   m = 1120;
-  jz = 100;
+  jz = 60;
   l = 0.52; %wheeltrack
   c = 0.88; %wheelbase
   
@@ -20,10 +20,12 @@ function [x2p, y2p, wp] = dinamica_direta(vx, vy, w, F1, F2, F3, F4, s1, s2, s3,
             0,   1,   0,    1,   0,   1,    0,    1;
             l/2, c/2, -l/2, c/2, l/2, -c/2, -l/2, -c/2];
 
+  Fw = (F2.*sin(s2+pi/2)-F1.*sin(s1+pi/2))/(l)+(F3.*cos(s3+pi/2)-F1.*cos(s1+pi/2))/(c);
+
   u = sigma*Fxy
 
-  x2p = (vy.*w)  + (1/m)*u(1,1);
-  y2p = (-vx.*w) + (1/m)*u(2,1);
-  wp  =    w.*0    + (1/jz)*u(3,1);
+  x2p = (vy.*w)  + (1/m)*u(1,:);
+  y2p = (-vx.*w) + (1/m)*u(2,:);
+  wp  =    w.*0    - (1/jz)*Fw;
 
 end

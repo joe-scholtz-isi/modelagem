@@ -1,4 +1,4 @@
-data = csvread("data/dynamics.csv");
+data = csvread("data/dynamics_wo_pid.csv");
 
 wheels_radius =  0.24;
 
@@ -15,13 +15,13 @@ gt_w = data(:,9);
 t_joint = data(:,10) - data(2,10);
 t_joint(1) = 0;
 s1 = data(:,11);
-F1 = data(:,12) * wheels_radius;
+F1 = data(:,12) / wheels_radius;
 s2 = data(:,13);
-F2 = data(:,14) * wheels_radius;
+F2 = data(:,14) / wheels_radius;
 s3 = data(:,15);
-F3 = data(:,16) * wheels_radius;
+F3 = data(:,16) / wheels_radius;
 s4 = data(:,17);
-F4 = data(:,18) * wheels_radius;
+F4 = data(:,18) / wheels_radius;
 
 
 vx = [];
@@ -36,9 +36,9 @@ for i = 1:length(F1)
   i
   length(F1)
   if(i == 1)
-    [x2p, y2p, theta2p] = dinamica_direta(0,0,0, F1(i), F2(i), F3(i), F4(i), s1(i), s2(i), s3(i), s4(i))
+    [x2p, y2p, theta2p] = direct_dynamics(0,0,0, F1(i), F2(i), F3(i), F4(i), s1(i), s2(i), s3(i), s4(i))
   else
-    [x2p, y2p, theta2p] = dinamica_direta(vx(end), vy(end), w(end), F1(i), F2(i), F3(i), F4(i), s1(i), s2(i), s3(i), s4(i))
+    [x2p, y2p, theta2p] = direct_dynamics(vx(end), vy(end), w(end), F1(i), F2(i), F3(i), F4(i), s1(i), s2(i), s3(i), s4(i))
   endif
 
   ax(end + 1) = x2p;
@@ -50,26 +50,46 @@ for i = 1:length(F1)
   w(end + 1) = trapz(t(1:i),wp);
 end
 
-theta = cumtrapz(t,w');
+theta = cumtrapz(t,w')+ gt_theta(3);
 theta = atan2(sin(theta),cos(theta)); %wrap to [-pi;pi]
 
-Vx = vx'.*cos(theta) - vy'.*sin(theta);
-Vy = vx'.*sin(theta) + vy'.*cos(theta);
+Vx = vx'.*cos(gt_theta) - vy'.*sin(gt_theta);
+Vy = vx'.*sin(gt_theta) + vy'.*cos(gt_theta);
 
-x = cumtrapz(t,Vx);
-y = cumtrapz(t,Vy);
+x = cumtrapz(t,Vx) + gt_x(3);
+y = cumtrapz(t,Vy) + gt_y(3);
 
 data = [t,x,y,theta];
 
-% plot(t,[theta,gt_theta])
-% legend(["theta";"gt theta"])
-% plot(t,x)
-% hold on
-% plot(t,gt_x)
-% legend(["Vx";"gt Vx"])
-% plot(t,[y,gt_y])
-% legend(["y";"gt y"])
-% plot(t,[x,y,theta,gt_x,gt_y,gt_theta]);
-% legend(["x";"y";"theta";"ground truth x"; "ground truth y"; "ground truth theta"]);
+figure(1)
+plot(t,[theta,gt_theta])
+legend(["model prediction";"ground truth"])
+title("global theta angle of the robot");
+ylabel("angle [rad]");
+xlabel("time [s]");
 
-csvwrite("data/dynamics_out.csv",data);
+figure(2)
+plot(t,[x,gt_x])
+legend(["model prediction";"ground truth"])
+title("global x coordinate of the robot");
+ylabel("distance [m]");
+xlabel("time [s]");
+
+figure(3)
+plot(t,[y,gt_y])
+legend(["model prediction";"ground truth"])
+title("global y coordinate of the robot");
+ylabel("distance [m]");
+xlabel("time [s]");
+
+figure(4)
+plot(x,y)
+title("global x-y coordinate of the robot");
+ylabel("distance [m]");
+xlabel("distance [m]");
+hold on
+plot(gt_x,gt_y)
+legend(["model prediction";"ground truth"])
+hold off
+
+% csvwrite("data/dynamics_out.csv",data);

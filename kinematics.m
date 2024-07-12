@@ -1,4 +1,4 @@
-data = csvread("data/kinematics.csv");
+data = csvread("data/kinematics_wo_pid_2.csv");
 
 wheels_radius =  0.24;
 
@@ -20,16 +20,16 @@ V3 = data(:,12) * wheels_radius;
 s4 = data(:,13);
 V4 = data(:,14) * wheels_radius;
 
-[vx, vy, w] = cinematica_direta(V1,V2,V3,V4, s1, s2, s3, s4);
+[vx, vy, w] = direct_kinematics(V1,V2,V3,V4, s1, s2, s3, s4);
 
-theta = cumtrapz(t,w');
+theta = cumtrapz(t_joint,w) + gt_theta(3);
 theta = atan2(sin(theta),cos(theta)); %wrap to [-pi;pi]
 
-% Vx = vx'.*cos(theta) - vy'.*sin(theta);
-% Vy = vx'.*sin(theta) + vy'.*cos(theta);
+Vx = vx.*cos(gt_theta) - vy.*sin(gt_theta);
+Vy = vx.*sin(gt_theta) + vy.*cos(gt_theta);
 
-x = cumtrapz(t,vx');
-y = cumtrapz(t,vy');
+x = cumtrapz(t_joint,Vx) + gt_x(3) - 0.5;
+y = cumtrapz(t_joint,Vy) + gt_y(3);
 
 data = [t,x,y,theta];
 
@@ -62,5 +62,6 @@ xlabel("distance [m]");
 hold on
 plot(gt_x,gt_y)
 legend(["model prediction";"ground truth"])
+hold off
 
 %csvwrite("data/kinematics_out.csv",data);
