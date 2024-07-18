@@ -28,7 +28,7 @@ theta = atan2(sin(theta),cos(theta)); %wrap to [-pi;pi]
 Vx = vx.*cos(gt_theta) - vy.*sin(gt_theta);
 Vy = vx.*sin(gt_theta) + vy.*cos(gt_theta);
 
-x = cumtrapz(t_joint,Vx) + gt_x(3) - 0.5;
+x = cumtrapz(t_joint,Vx) + gt_x(3);
 y = cumtrapz(t_joint,Vy) + gt_y(3);
 
 data = [t,x,y,theta];
